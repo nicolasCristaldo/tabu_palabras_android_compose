@@ -10,11 +10,13 @@ import com.nicolascristaldo.tabupalabras.ui.screens.config.ConfigScreen
 import com.nicolascristaldo.tabupalabras.ui.screens.game.GameScreen
 import com.nicolascristaldo.tabupalabras.ui.screens.home.HomeScreen
 import com.nicolascristaldo.tabupalabras.ui.screens.result.ResultScreen
+import com.nicolascristaldo.tabupalabras.ui.viewmodels.TabuViewModel
 
 @Composable
 fun TabuPalabrasNavHost(
+    viewModel: TabuViewModel,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     NavHost(
         navController = navController,
@@ -22,13 +24,19 @@ fun TabuPalabrasNavHost(
         modifier = modifier
     ) {
         composable(route = AppDestinations.Home.route) {
-            HomeScreen()
+            HomeScreen(
+                viewModel = viewModel,
+                navController = navController
+            )
         }
         composable(route = AppDestinations.Game.route) {
             GameScreen()
         }
         composable(route = AppDestinations.Config.route) {
-            ConfigScreen()
+            ConfigScreen(
+                viewModel = viewModel,
+                navController = navController
+            )
         }
         composable(route = AppDestinations.Result.route) {
             ResultScreen()

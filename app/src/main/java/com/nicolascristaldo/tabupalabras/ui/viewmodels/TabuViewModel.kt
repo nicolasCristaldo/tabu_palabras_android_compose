@@ -122,7 +122,12 @@ class TabuViewModel @Inject constructor(): ViewModel() {
             else -> null
         }
 
-        _uiState.update { _uiState.value.copy(winner = winner, currentScreen = AppDestinations.Result) }
+        _uiState.update {
+            _uiState.value.copy(
+                winner = winner,
+                currentScreen = AppDestinations.Result
+            )
+        }
     }
 
     // ******************************   RESULT   ******************************

@@ -14,22 +14,38 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.nicolascristaldo.tabupalabras.R
+import com.nicolascristaldo.tabupalabras.data.destinations.AppDestinations
 import com.nicolascristaldo.tabupalabras.data.providers.CategoriesProvider
 import com.nicolascristaldo.tabupalabras.domain.model.TabuCategory
 import com.nicolascristaldo.tabupalabras.ui.theme.categoryCardBackGround
+import com.nicolascristaldo.tabupalabras.ui.viewmodels.TabuViewModel
 
 @Composable
 fun HomeScreen(
+    viewModel: TabuViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     val categories = CategoriesProvider().getCategories()
+
+    LaunchedEffect(uiState.currentScreen) {
+        if (uiState.currentScreen != AppDestinations.Home) {
+            navController.navigate(uiState.currentScreen.route)
+        }
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -47,7 +63,7 @@ fun HomeScreen(
                 val category = categories[index]
                 CategoryCard(
                     category = category,
-                    onClick = { /* Handle category click */ },
+                    onClick = { viewModel.onCategorySelected(category) },
                     modifier = Modifier
                         .padding(8.dp)
                         .height(170.dp)
