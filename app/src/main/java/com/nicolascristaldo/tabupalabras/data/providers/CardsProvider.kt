@@ -23,6 +23,26 @@ class CardsProvider {
             word = "Caballo",
             category = "Animales",
             forbiddenWords = listOf("Perro", "Gato")
-        )
+        ),
+        TabuCard(
+            word = "Pizza",
+            category = "Comidas",
+            forbiddenWords = listOf("Hamburguesa", "Sushi")
+        ),
+        TabuCard(
+            word = "Hamburguesa",
+            category = "Comidas",
+            forbiddenWords = listOf("Pizza", "Sushi")
+        ),
+        TabuCard(
+            word = "Sushi",
+            category = "Comidas",
+            forbiddenWords = listOf("Pizza", "Hamburguesa")
+        ),
+        TabuCard(
+            word = "Película",
+            category = "Pelícilas y Series",
+            forbiddenWords = listOf("Serie", "Película de TV")
+        ),
     )
 }

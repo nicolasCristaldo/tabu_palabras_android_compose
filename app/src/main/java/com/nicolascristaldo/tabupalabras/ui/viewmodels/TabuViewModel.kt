@@ -61,22 +61,28 @@ class TabuViewModel @Inject constructor(): ViewModel() {
             _uiState.value.copy(
                 availableCards = cards,
                 currentCard = cards.firstOrNull(),
-                currentScreen = AppDestinations.Game
+                currentScreen = AppDestinations.Game,
+                currentRound = 1,
+                currentTeam = 1,
+                turnsPlayedInRound = 0,
+                timeLeft = _uiState.value.minutesPerRound * 60,
+                isPlaying = false
             )
         }
     }
 
     // ******************************   GAME   ******************************
 
-    fun nextCard(correct: Boolean) {
-        if (correct) {
-            if (_uiState.value.currentTeam == 1) {
-                _uiState.update { _uiState.value.copy(team1 = _uiState.value.team1.addPoint()) }
-            } else {
-                _uiState.update { _uiState.value.copy(team2 = _uiState.value.team2.addPoint()) }
-            }
-        }
+    fun nextCard(result: Boolean?) {
+        val currentTeam = _uiState.value.currentTeam
         val nextCard = _uiState.value.availableCards.firstOrNull()
+
+        if (currentTeam == 1) {
+            _uiState.update { _uiState.value.copy(team1 = _uiState.value.team1.addResult(result)) }
+        } else {
+            _uiState.update { _uiState.value.copy(team2 = _uiState.value.team2.addResult(result)) }
+        }
+
         _uiState.update {
             _uiState.value.copy(
                 currentCard = nextCard,
@@ -85,40 +91,64 @@ class TabuViewModel @Inject constructor(): ViewModel() {
         }
     }
 
-    fun endRound() {
-        if (_uiState.value.currentRound < _uiState.value.rounds) {
-            _uiState.update { _uiState.value.copy(currentRound = _uiState.value.currentRound + 1) }
-            switchTeam()
-        }
-        else {
-            endGame()
-        }
-    }
+    fun startTimer() = viewModelScope.launch {
+        _uiState.update { _uiState.value.copy(isPlaying = true) }
 
-    fun switchTeam() {
-        _uiState.update {
-            _uiState.value.copy(
-                currentTeam = if (_uiState.value.currentTeam == 1) 2 else 1,
-                timeLeft = _uiState.value.minutesPerRound * 60
-            )
-        }
-    }
-
-    private fun startTimer() = viewModelScope.launch {
         while (_uiState.value.timeLeft > 0){
             delay(1000)
             _uiState.update { _uiState.value.copy(timeLeft = _uiState.value.timeLeft - 1) }
         }
 
-        if (_uiState.value.currentTeam == 0) {
-            switchTeam()
+        if (_uiState.value.timeLeft == 0) {
+            val turnsPlayed = _uiState.value.turnsPlayedInRound + 1
+
+            if (turnsPlayed == 2 && _uiState.value.currentRound >= _uiState.value.rounds) {
+                endGame()
+            }
+            else { switchTeam() }
         }
     }
 
-    fun endGame() {
+    private fun switchTeam() {
+        val turnsPlayed = _uiState.value.turnsPlayedInRound + 1
+
+        _uiState.update {
+            _uiState.value.copy(
+                currentTeam = if (_uiState.value.currentTeam == 1) 2 else 1,
+                timeLeft = _uiState.value.minutesPerRound * 60,
+                isPlaying = false,
+                turnsPlayedInRound = turnsPlayed
+            )
+        }
+
+        if (turnsPlayed == 2) {
+            endRound()
+        }
+    }
+
+    private fun endRound() {
+        if (_uiState.value.currentRound < _uiState.value.rounds) {
+            _uiState.update {
+                _uiState.value.copy(
+                    currentRound = _uiState.value.currentRound + 1,
+                    turnsPlayedInRound = 0,
+                    currentTeam = 1
+                )
+            }
+        }
+        else { endGame() }
+    }
+
+    private fun endGame() {
+        val team1 = _uiState.value.team1
+        val team2 = _uiState.value.team2
         val winner = when {
-            _uiState.value.team1.score > _uiState.value.team2.score -> _uiState.value.team1
-            _uiState.value.team1.score < _uiState.value.team2.score -> _uiState.value.team2
+            team1.score > team2.score -> team1
+            team1.score < team2.score -> team2
+            team1.errors < team2.errors -> team1
+            team1.errors > team2.errors -> team2
+            team1.totalWords < team2.totalWords -> team1
+            team1.totalWords > team2.totalWords -> team2
             else -> null
         }
 
@@ -137,8 +167,16 @@ class TabuViewModel @Inject constructor(): ViewModel() {
             _uiState.value.copy(
                 currentScreen = AppDestinations.Home,
                 categorySelected = null,
-                team1 = _uiState.value.team1.copy(score = 0, errors = 0),
-                team2 = _uiState.value.team2.copy(score = 0, errors = 0),
+                team1 = _uiState.value.team1.resetScore(),
+                team2 = _uiState.value.team2.resetScore(),
+                winner = null,
+                isPlaying = false,
+                currentRound = 1,
+                currentTeam = 1,
+                turnsPlayedInRound = 0,
+                timeLeft = _uiState.value.minutesPerRound * 60, // Reinicia timeLeft
+                availableCards = emptyList(),
+                currentCard = null
             )
         }
     }

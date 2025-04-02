@@ -13,8 +13,10 @@ data class TabuUiState(
     val rounds: Int = 1,
     val minutesPerRound: Int = 1,
     val availableCards: List<TabuCard> = emptyList(),
+    val isPlaying: Boolean = false,
     val timeLeft: Int = 60,
     val currentRound: Int = 1,
+    val turnsPlayedInRound: Int = 0,
     val currentCard: TabuCard? = null,
     val currentTeam: Int = 1,
     val winner: Team? = null
