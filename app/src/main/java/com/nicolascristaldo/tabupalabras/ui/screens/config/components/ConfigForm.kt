@@ -1,15 +1,19 @@
 package com.nicolascristaldo.tabupalabras.ui.screens.config.components
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,11 +25,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.nicolascristaldo.tabupalabras.R
+import com.nicolascristaldo.tabupalabras.ui.components.ActionButton
+import com.nicolascristaldo.tabupalabras.ui.theme.team1Color
+import com.nicolascristaldo.tabupalabras.ui.theme.team2Color
 import com.nicolascristaldo.tabupalabras.ui.uistates.TabuUiState
 
 @Composable
@@ -40,51 +48,48 @@ fun ConfigForm(
 ) {
     var editingTeam by remember { mutableStateOf<String?>(null) }
 
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = modifier) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
-            TeamNameCard(
-                name = uiState.team1.name,
-                color = Color.Red,
-                onEdit = { editingTeam = "team1" }
+            NameCardsSection(
+                team1Name = uiState.team1.name,
+                team2Name = uiState.team2.name,
+                onTeam1CardClick = { editingTeam = "Equipo Rojo" },
+                onTeam2CardClick = { editingTeam = "Equipo Azul" },
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Text(text = "VS")
+            Spacer(modifier = Modifier.weight(.3f))
 
-            TeamNameCard(
-                name = uiState.team2.name,
-                color = Color.Blue,
-                onEdit = { editingTeam = "team2" }
-            )
-
-            Text(text = "Rondas")
-            CounterRow(
+            CounterSection(
+                title = "Rondas",
                 count = uiState.rounds,
-                onValueChange = onRoundsChange
+                onRoundsChange = onRoundsChange,
+                modifier = Modifier.padding(8.dp)
             )
 
-            Text(text = "Tiempo")
-            CounterRow(
+            CounterSection(
+                title = "Minutos",
                 count = uiState.minutesPerRound,
-                onValueChange = onMinutesChange
+                onRoundsChange = onMinutesChange,
+                modifier = Modifier.padding(8.dp)
             )
 
-            Button(
+            Spacer(modifier = Modifier.weight(.7f))
+
+            ActionButton(
+                text = "Iniciar Juego",
                 onClick = onStartGame,
-                modifier = Modifier.align(Alignment.End)
-            ) {
-                Text(text = "Iniciar Juego")
-            }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp, vertical = 8.dp)
+            )
         }
 
         if (editingTeam != null) {
             EditNameDialog(
-                team1Name = uiState.team1.name,
-                team2Name = uiState.team2.name,
                 onTeam1NameChange = onTeam1NameChange,
                 onTeam2NameChange = onTeam2NameChange,
                 editingTeam = editingTeam,
@@ -95,9 +100,70 @@ fun ConfigForm(
 }
 
 @Composable
-fun EditNameDialog(
+fun NameCardsSection(
     team1Name: String,
     team2Name: String,
+    onTeam1CardClick: () -> Unit,
+    onTeam2CardClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        TeamNameCard(
+            name = team1Name,
+            color = team1Color,
+            onEditClick = onTeam1CardClick,
+            modifier = Modifier
+                .height(75.dp)
+                .fillMaxWidth()
+        )
+
+        Image(
+            painter = painterResource(R.drawable.ic_versus),
+            contentDescription = null,
+            modifier = Modifier
+                .padding(8.dp)
+                .size(100.dp)
+        )
+
+        TeamNameCard(
+            name = team2Name,
+            color = team2Color,
+            onEditClick = onTeam2CardClick,
+            modifier = Modifier
+                .height(75.dp)
+                .fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+fun CounterSection(
+    title: String,
+    count: Int,
+    onRoundsChange: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Text(
+            text = title,
+            modifier = Modifier.padding(8.dp)
+        )
+
+        CounterRow(
+            count = count,
+            onValueChange = onRoundsChange
+        )
+    }
+}
+
+@Composable
+fun EditNameDialog(
     onTeam1NameChange: (String) -> Unit,
     onTeam2NameChange: (String) -> Unit,
     editingTeam: String?,
@@ -106,8 +172,7 @@ fun EditNameDialog(
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    val currentName = if (editingTeam == "team1") team1Name else team2Name
-    val onNameChange = if (editingTeam == "team1") onTeam1NameChange else onTeam2NameChange
+    val onNameChange = if (editingTeam == "Equipo Rojo") onTeam1NameChange else onTeam2NameChange
 
     Dialog(
         onDismissRequest = { changeEditingState() }
@@ -116,14 +181,16 @@ fun EditNameDialog(
             contentAlignment = Alignment.Center,
             modifier = modifier
                 .background(
-                    color = if (editingTeam == "team1") Color.Red else Color.Blue,
+                    color = if (editingTeam == "Equipo Rojo") team1Color else team2Color,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .padding(16.dp)
         ) {
             ConfigTextField(
-                value = currentName,
-                onValueChange = { onNameChange(it) },
+                onValueChange = {
+                    if(it.isEmpty()) { onNameChange(editingTeam!!) }
+                    else { onNameChange(it) }
+                },
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
                     onDone = {

@@ -12,11 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,23 +26,17 @@ import com.nicolascristaldo.tabupalabras.R
 import com.nicolascristaldo.tabupalabras.data.destinations.AppDestinations
 import com.nicolascristaldo.tabupalabras.data.providers.CategoriesProvider
 import com.nicolascristaldo.tabupalabras.domain.model.TabuCategory
-import com.nicolascristaldo.tabupalabras.ui.theme.categoryCardBackGround
-import com.nicolascristaldo.tabupalabras.ui.viewmodels.TabuViewModel
+import com.nicolascristaldo.tabupalabras.ui.theme.linearGradientBackground
+import com.nicolascristaldo.tabupalabras.ui.theme.textBlack
+import com.nicolascristaldo.tabupalabras.ui.theme.textWhite
 
 @Composable
 fun HomeScreen(
-    viewModel: TabuViewModel,
+    onCategorySelected: (TabuCategory) -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    val uiState by viewModel.uiState.collectAsState()
     val categories = CategoriesProvider().getCategories()
-
-    LaunchedEffect(uiState.currentScreen) {
-        if (uiState.currentScreen != AppDestinations.Home) {
-            navController.navigate(uiState.currentScreen.route)
-        }
-    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -63,7 +55,10 @@ fun HomeScreen(
                 val category = categories[index]
                 CategoryCard(
                     category = category,
-                    onClick = { viewModel.onCategorySelected(category) },
+                    onClick = {
+                        onCategorySelected(category)
+                        navController.navigate(AppDestinations.Config.route)
+                    },
                     modifier = Modifier
                         .padding(8.dp)
                         .height(170.dp)
@@ -89,7 +84,8 @@ fun HomeHeader(
         )
         Text(
             text = "Tabú palabras",
-            fontSize = 38.sp,
+            style = MaterialTheme.typography.displayMedium,
+            color = textWhite,
             textAlign = TextAlign.Center,
         )
     }
@@ -108,7 +104,7 @@ fun CategoryCard(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .categoryCardBackGround(
+                .linearGradientBackground(
                     startColor = category.colors[0],
                     endColor = category.colors[1]
                 )
@@ -123,11 +119,12 @@ fun CategoryCard(
             )
             Text(
                 text = category.name,
-                fontSize = 20.sp,
+                style = MaterialTheme.typography.titleMedium,
+                color = textBlack,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(16.dp)
+                    .padding(8.dp)
                     .fillMaxWidth()
             )
         }

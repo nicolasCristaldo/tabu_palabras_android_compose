@@ -1,8 +1,10 @@
 package com.nicolascristaldo.tabupalabras.ui.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,7 +28,7 @@ fun TabuPalabrasNavHost(
     ) {
         composable(route = AppDestinations.Home.route) {
             HomeScreen(
-                viewModel = viewModel,
+                onCategorySelected = viewModel::onCategorySelected,
                 navController = navController
             )
         }
@@ -34,7 +36,8 @@ fun TabuPalabrasNavHost(
         composable(route = AppDestinations.Config.route) {
             ConfigScreen(
                 viewModel = viewModel,
-                navController = navController
+                navController = navController,
+                modifier = Modifier.fillMaxSize()
             )
         }
 
@@ -50,7 +53,9 @@ fun TabuPalabrasNavHost(
             ResultScreen(
                 viewModel = viewModel,
                 navController = navController,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxSize()
             )
         }
     }

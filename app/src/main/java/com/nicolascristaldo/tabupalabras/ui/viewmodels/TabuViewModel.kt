@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TabuViewModel @Inject constructor(): ViewModel() {
+class TabuViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(TabuUiState())
     val uiState: StateFlow<TabuUiState> = _uiState.asStateFlow()
 
@@ -74,19 +74,18 @@ class TabuViewModel @Inject constructor(): ViewModel() {
     // ******************************   GAME   ******************************
 
     fun nextCard(result: Boolean?) {
-        val currentTeam = _uiState.value.currentTeam
-        val nextCard = _uiState.value.availableCards.firstOrNull()
+        _uiState.update { currentState ->
+            val newAvailableCards = currentState.availableCards.drop(1)
+            val nextCard = newAvailableCards.firstOrNull()
+            val currentTeam = currentState.currentTeam
+            val updatedTeam = if (currentTeam == 1) currentState.team1.addResult(result)
+            else currentState.team2.addResult(result)
 
-        if (currentTeam == 1) {
-            _uiState.update { _uiState.value.copy(team1 = _uiState.value.team1.addResult(result)) }
-        } else {
-            _uiState.update { _uiState.value.copy(team2 = _uiState.value.team2.addResult(result)) }
-        }
-
-        _uiState.update {
-            _uiState.value.copy(
+            currentState.copy(
+                team1 = if (currentTeam == 1) updatedTeam else currentState.team1,
+                team2 = if (currentTeam == 2) updatedTeam else currentState.team2,
                 currentCard = nextCard,
-                availableCards = _uiState.value.availableCards.drop(1)
+                availableCards = newAvailableCards
             )
         }
     }
@@ -94,7 +93,7 @@ class TabuViewModel @Inject constructor(): ViewModel() {
     fun startTimer() = viewModelScope.launch {
         _uiState.update { _uiState.value.copy(isPlaying = true) }
 
-        while (_uiState.value.timeLeft > 0){
+        while (_uiState.value.timeLeft > 0) {
             delay(1000)
             _uiState.update { _uiState.value.copy(timeLeft = _uiState.value.timeLeft - 1) }
         }
@@ -104,8 +103,9 @@ class TabuViewModel @Inject constructor(): ViewModel() {
 
             if (turnsPlayed == 2 && _uiState.value.currentRound >= _uiState.value.rounds) {
                 endGame()
+            } else {
+                switchTeam()
             }
-            else { switchTeam() }
         }
     }
 
@@ -135,8 +135,9 @@ class TabuViewModel @Inject constructor(): ViewModel() {
                     currentTeam = 1
                 )
             }
+        } else {
+            endGame()
         }
-        else { endGame() }
     }
 
     private fun endGame() {
@@ -174,7 +175,7 @@ class TabuViewModel @Inject constructor(): ViewModel() {
                 currentRound = 1,
                 currentTeam = 1,
                 turnsPlayedInRound = 0,
-                timeLeft = _uiState.value.minutesPerRound * 60, // Reinicia timeLeft
+                timeLeft = _uiState.value.minutesPerRound * 60,
                 availableCards = emptyList(),
                 currentCard = null
             )

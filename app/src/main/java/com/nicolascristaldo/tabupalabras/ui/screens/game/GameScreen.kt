@@ -1,6 +1,5 @@
 package com.nicolascristaldo.tabupalabras.ui.screens.game
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,14 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,8 +24,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.nicolascristaldo.tabupalabras.R
 import com.nicolascristaldo.tabupalabras.data.destinations.AppDestinations
 import com.nicolascristaldo.tabupalabras.domain.model.TabuCard
+import com.nicolascristaldo.tabupalabras.ui.components.ActionButton
+import com.nicolascristaldo.tabupalabras.ui.screens.game.components.RoundGameButton
+import com.nicolascristaldo.tabupalabras.ui.theme.cardBackGroundColor
+import com.nicolascristaldo.tabupalabras.ui.theme.cardTitleBackGroundColor1
+import com.nicolascristaldo.tabupalabras.ui.theme.cardTitleBackGroundColor2
+import com.nicolascristaldo.tabupalabras.ui.theme.correctWordButtonColor
+import com.nicolascristaldo.tabupalabras.ui.theme.errorButtonColor
+import com.nicolascristaldo.tabupalabras.ui.theme.linearGradientBackground
+import com.nicolascristaldo.tabupalabras.ui.theme.passWordButtonColor
+import com.nicolascristaldo.tabupalabras.ui.theme.team1Color
+import com.nicolascristaldo.tabupalabras.ui.theme.team2Color
+import com.nicolascristaldo.tabupalabras.ui.theme.textBlack
+import com.nicolascristaldo.tabupalabras.ui.theme.textWhite
 import com.nicolascristaldo.tabupalabras.ui.viewmodels.TabuViewModel
 
 @Composable
@@ -61,10 +69,11 @@ fun GameScreen(
     else {
         StartRoundScreen(
             currentTeam = if (uiState.currentTeam == 1) uiState.team1.name else uiState.team2.name,
+            teamColor = if (uiState.currentTeam == 1) team1Color else team2Color,
             currentRound = uiState.currentRound,
             rounds = uiState.rounds,
             onStartRound = viewModel::startTimer,
-            modifier = modifier
+            modifier = modifier.padding(16.dp)
         )
     }
 }
@@ -72,6 +81,7 @@ fun GameScreen(
 @Composable
 fun StartRoundScreen(
     currentTeam: String,
+    teamColor: Color,
     currentRound: Int,
     rounds: Int,
     onStartRound: () -> Unit,
@@ -79,24 +89,42 @@ fun StartRoundScreen(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly,
         modifier = modifier
     ) {
+        Spacer(modifier = Modifier.weight(.2f))
         Text(
-            text = "Turno de $currentTeam"
+            text = "Ronda $currentRound de $rounds",
+            style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center,
+            color = textWhite
+        )
+
+        Spacer(modifier = Modifier.weight(.5f))
+
+        Text(
+            text = "Turno de:",
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center,
+            color = textWhite,
+            modifier = Modifier.padding(bottom = 8.dp)
         )
 
         Text(
-            text = "Ronda $currentRound de $rounds"
+            text = currentTeam,
+            style = MaterialTheme.typography.displayLarge,
+            textAlign = TextAlign.Center,
+            color = teamColor
         )
 
-        Button(
-            onClick = { onStartRound() }
-        ) {
-            Text(
-                text = "¡Empezar!"
-            )
-        }
+        Spacer(modifier = Modifier.weight(1f))
+
+        ActionButton(
+            text = "¡Empezar!",
+            onClick = onStartRound,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp, vertical = 8.dp)
+        )
     }
 }
 
@@ -118,7 +146,7 @@ fun PlayScreen(
             modifier = Modifier.padding(top = 32.dp)
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(.4f))
 
         currentCard?.let { card ->
             GameCard(
@@ -129,7 +157,7 @@ fun PlayScreen(
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(.6f))
 
         GameButtons(
             onCorrect = onCorrect,
@@ -148,7 +176,9 @@ fun GameTimer(
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = "Tiempo restante: $timeLeft",
+        text = timeLeft.toString(),
+        style = MaterialTheme.typography.headlineMedium,
+        color = textWhite,
         modifier = modifier
     )
 }
@@ -161,7 +191,7 @@ fun GameCard(
     Card(
         shape = RoundedCornerShape(32.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Blue),
+        colors = CardDefaults.cardColors(containerColor = cardBackGroundColor),
         modifier = modifier
     ) {
         Column(
@@ -173,11 +203,16 @@ fun GameCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(3f)
-                    .background(color = Color.Magenta)
+                    .linearGradientBackground(
+                        startColor = cardTitleBackGroundColor1,
+                        endColor = cardTitleBackGroundColor2
+                    )
             ) {
                 Text(
                     text = card.word,
                     textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.displayMedium,
+                    color = textWhite,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -192,6 +227,8 @@ fun GameCard(
                     Text(
                         text = forbiddenWord,
                         textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = textBlack,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -212,29 +249,22 @@ fun GameButtons(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = modifier
     ) {
-        Button(
-            onClick = { onPass() }
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Refresh,
-                contentDescription = "Pasar"
-            )
-        }
-        Button(
-            onClick = { onWrong() },
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Close,
-                contentDescription = "Error"
-            )
-        }
-        Button(
-            onClick = { onCorrect() },
-        ) {
-            Icon(
-                imageVector = Icons.Filled.CheckCircle,
-                contentDescription = "Correcto"
-            )
-        }
+        RoundGameButton(
+            icon = R.drawable.ic_refresh,
+            onClick = onWrong,
+            color = passWordButtonColor,
+        )
+
+        RoundGameButton(
+            icon = R.drawable.ic_silence,
+            onClick = onCorrect,
+            color = errorButtonColor,
+        )
+
+        RoundGameButton(
+            icon = R.drawable.ic_correct,
+            onClick = onPass,
+            color = correctWordButtonColor,
+        )
     }
 }

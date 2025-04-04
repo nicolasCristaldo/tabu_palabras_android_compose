@@ -36,7 +36,7 @@ class CategoriesProvider {
             emoji = "\uD83C\uDF54"
         ),
         TabuCategory(
-            name = "Pelícilas y Series",
+            name = "Películas y Series",
             colors = listOf(entertainmentCategoryColor1, entertainmentCategoryColor2)
             , emoji = "\uD83C\uDF7F"
         ),

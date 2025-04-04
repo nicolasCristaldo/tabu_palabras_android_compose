@@ -20,6 +20,4 @@ data class TabuUiState(
     val currentCard: TabuCard? = null,
     val currentTeam: Int = 1,
     val winner: Team? = null
-) {
-    fun isValidName(name: String): Boolean = name.isNotBlank() && name.length <= 20
-}
+)
