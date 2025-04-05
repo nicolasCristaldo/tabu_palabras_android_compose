@@ -9,8 +9,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.nicolascristaldo.tabupalabras.R
 import com.nicolascristaldo.tabupalabras.ui.theme.textWhite
 
 @Composable
@@ -24,20 +26,20 @@ fun RoundGameButton(
         onClick = { onClick() },
         shape = CircleShape,
         elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 30.dp,
-            pressedElevation = 45.dp
+            defaultElevation = dimensionResource(R.dimen.game_button_elevation_default),
+            pressedElevation = dimensionResource(R.dimen.game_button_elevation_pressed)
         ),
         colors = ButtonDefaults.buttonColors(
             containerColor = color,
             contentColor = textWhite
         ),
         contentPadding = PaddingValues(0.dp),
-        modifier = modifier.size(75.dp)
+        modifier = modifier.size(dimensionResource(R.dimen.game_button_size))
     ) {
         Icon(
             painter = painterResource(id = icon),
             contentDescription = null,
-            modifier = Modifier.size(55.dp)
+            modifier = Modifier.size(dimensionResource(R.dimen.game_button_icon_size))
         )
     }
 }

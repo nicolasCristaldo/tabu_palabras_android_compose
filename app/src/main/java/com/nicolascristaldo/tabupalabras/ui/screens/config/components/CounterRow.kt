@@ -6,7 +6,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import com.nicolascristaldo.tabupalabras.R
 import com.nicolascristaldo.tabupalabras.ui.components.ActionButton
 
 @Composable
@@ -20,7 +22,7 @@ fun CounterRow(
         modifier = modifier
     ) {
         ActionButton(
-            text = "-",
+            text = stringResource(R.string.counter_decrement),
             onClick = { onValueChange(count - 1) },
             enabled = count > 1
         )
@@ -28,12 +30,12 @@ fun CounterRow(
         Text(
             text = count.toString(),
             modifier = Modifier
-                .padding(horizontal = 32.dp)
+                .padding(horizontal = dimensionResource(R.dimen.padding_large))
                 .align(Alignment.CenterVertically)
         )
 
         ActionButton(
-            text = "+",
+            text = stringResource(R.string.counter_increment),
             onClick = { onValueChange(count + 1) },
             enabled = count < 3
         )

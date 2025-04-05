@@ -15,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import com.nicolascristaldo.tabupalabras.R
 import com.nicolascristaldo.tabupalabras.ui.theme.textWhite
 
 @Composable
@@ -31,20 +33,20 @@ fun TeamNameCard(
         colors = CardDefaults.cardColors(
             containerColor = color
         ),
-        shape = RoundedCornerShape(50.dp),
+        shape = RoundedCornerShape(dimensionResource(R.dimen.team_card_corner_radius)),
         modifier = modifier
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(dimensionResource(R.dimen.padding_medium))
         ) {
             Icon(
                 imageVector = Icons.Filled.Edit,
-                contentDescription = "edit",
+                contentDescription = stringResource(R.string.edit_icon_description),
                 tint = textWhite,
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(dimensionResource(R.dimen.edit_icon_size))
                     .align(Alignment.CenterStart)
             )
 

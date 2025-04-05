@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Paddings -->
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">32dp</dimen>
+
+    <!-- Component sizes -->
+    <dimen name="team_card_height">75dp</dimen>
+    <dimen name="game_button_size">75dp</dimen>
+    <dimen name="versus_icon_size">100dp</dimen>
+    <dimen name="category_card_height">170dp</dimen>
+    <dimen name="back_icon_size">40dp</dimen>
+    <dimen name="edit_icon_size">50dp</dimen>
+    <dimen name="game_button_icon_size">55dp</dimen>
+    <dimen name="logo_size">170dp</dimen>
+
+    <!-- Corner radius -->
+    <dimen name="team_card_corner_radius">50dp</dimen>
+    <dimen name="config_dialog_corner_radius">16dp</dimen>
+
+    <!-- Elevations -->
+    <dimen name="card_elevation_default">20dp</dimen>
+    <dimen name="game_button_elevation_default">30dp</dimen>
+    <dimen name="game_button_elevation_pressed">45dp</dimen>
+
+    <!-- Font sizes -->
+    <dimen name="emoji_font_size">36sp</dimen>
+</resources>

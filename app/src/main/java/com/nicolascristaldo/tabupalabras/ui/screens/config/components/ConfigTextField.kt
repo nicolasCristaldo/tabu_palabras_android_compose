@@ -10,6 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.nicolascristaldo.tabupalabras.R
 
 @Composable
 fun ConfigTextField(
@@ -23,7 +25,7 @@ fun ConfigTextField(
     OutlinedTextField(
         value = newName,
         onValueChange = {
-            if (it.length <= 20) {
+            if (it.length <= 18) {
                 onValueChange(it)
                 newName = it
             }
@@ -32,7 +34,7 @@ fun ConfigTextField(
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         label = {
-            Text(text = "Nombre del equipo")
+            Text(text = stringResource(R.string.team_name_label))
         },
         modifier = modifier
     )

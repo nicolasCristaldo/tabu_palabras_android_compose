@@ -56,7 +56,9 @@ class TabuViewModel @Inject constructor() : ViewModel() {
     }
 
     fun startGame() {
-        val cards = CardsProvider().cards
+        val cards = CardsProvider().getCardsByCategory(
+            _uiState.value.categorySelected?.name ?: "General"
+        )
         _uiState.update {
             _uiState.value.copy(
                 availableCards = cards,
@@ -111,9 +113,13 @@ class TabuViewModel @Inject constructor() : ViewModel() {
 
     private fun switchTeam() {
         val turnsPlayed = _uiState.value.turnsPlayedInRound + 1
+        val newAvailableCardsPositions = _uiState.value.availableCards.shuffled()
+        val newCurrentCard = newAvailableCardsPositions.firstOrNull()
 
         _uiState.update {
             _uiState.value.copy(
+                availableCards = newAvailableCardsPositions,
+                currentCard = newCurrentCard,
                 currentTeam = if (_uiState.value.currentTeam == 1) 2 else 1,
                 timeLeft = _uiState.value.minutesPerRound * 60,
                 isPlaying = false,
@@ -163,14 +169,11 @@ class TabuViewModel @Inject constructor() : ViewModel() {
 
     // ******************************   RESULT   ******************************
 
-    fun resetGame() {
+    fun resetGame() = viewModelScope.launch {
         _uiState.update {
             _uiState.value.copy(
                 currentScreen = AppDestinations.Home,
                 categorySelected = null,
-                team1 = _uiState.value.team1.resetScore(),
-                team2 = _uiState.value.team2.resetScore(),
-                winner = null,
                 isPlaying = false,
                 currentRound = 1,
                 currentTeam = 1,
@@ -178,6 +181,18 @@ class TabuViewModel @Inject constructor() : ViewModel() {
                 timeLeft = _uiState.value.minutesPerRound * 60,
                 availableCards = emptyList(),
                 currentCard = null
+            )
+        }
+        delay(2000)
+        resetScore()
+    }
+
+    private fun resetScore() {
+        _uiState.update {
+            _uiState.value.copy(
+                team1 = _uiState.value.team1.resetScore(),
+                team2 = _uiState.value.team2.resetScore(),
+                winner = null
             )
         }
     }

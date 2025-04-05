@@ -12,8 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import com.nicolascristaldo.tabupalabras.R
 import com.nicolascristaldo.tabupalabras.ui.theme.textWhite
 
 @Composable
@@ -31,13 +33,13 @@ fun ConfigTopAppBar(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "back",
-                modifier = Modifier.size(40.dp)
+                contentDescription = stringResource(R.string.back_button_description),
+                modifier = Modifier.size(dimensionResource(R.dimen.back_icon_size))
             )
         }
 
         Text(
-            text = "Categoría: $title",
+            text = stringResource(R.string.category, title),
             style = MaterialTheme.typography.displaySmall,
             textAlign = TextAlign.Center,
             color = textWhite,

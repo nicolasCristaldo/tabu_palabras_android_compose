@@ -4,10 +4,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.nicolascristaldo.tabupalabras.R
 import com.nicolascristaldo.tabupalabras.data.destinations.AppDestinations
 import com.nicolascristaldo.tabupalabras.ui.screens.config.ConfigScreen
 import com.nicolascristaldo.tabupalabras.ui.screens.game.GameScreen
@@ -54,7 +55,7 @@ fun TabuPalabrasNavHost(
                 viewModel = viewModel,
                 navController = navController,
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(dimensionResource(R.dimen.padding_medium))
                     .fillMaxSize()
             )
         }
