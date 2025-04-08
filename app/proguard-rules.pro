@@ -19,3 +19,18 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.nicolascristaldo.tabupalabras.domain.model.** { *; }
+
+-keep class com.nicolascristaldo.tabupalabras.data.providers.** { *; }
+
+-keep class com.nicolascristaldo.tabupalabras.data.destinations.** { *; }
+
+# Mantener clases de argumentos de navegación
+-keep class * implements androidx.navigation.NavArgs { *; }
+
+# Evitar advertencias de bibliotecas comunes
+-dontwarn org.jetbrains.kotlin.**
+
+# Mantener clases de estado
+-keep class kotlinx.coroutines.flow.** { *; }

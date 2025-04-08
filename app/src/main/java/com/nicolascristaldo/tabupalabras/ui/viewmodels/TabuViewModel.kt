@@ -77,7 +77,10 @@ class TabuViewModel @Inject constructor() : ViewModel() {
 
     fun nextCard(result: Boolean?) {
         _uiState.update { currentState ->
-            val newAvailableCards = currentState.availableCards.drop(1)
+            val availableCards = currentState.availableCards.drop(1)
+            val newAvailableCards = availableCards.ifEmpty {
+                CardsProvider().getCardsByCategory(currentState.categorySelected?.name ?: "General")
+            }
             val nextCard = newAvailableCards.firstOrNull()
             val currentTeam = currentState.currentTeam
             val updatedTeam = if (currentTeam == 1) currentState.team1.addResult(result)

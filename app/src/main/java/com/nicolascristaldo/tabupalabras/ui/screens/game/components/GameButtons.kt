@@ -24,19 +24,19 @@ fun GameButtons(
     ) {
         RoundGameButton(
             icon = R.drawable.ic_refresh,
-            onClick = onWrong,
+            onClick = onPass,
             color = passWordButtonColor,
         )
 
         RoundGameButton(
             icon = R.drawable.ic_silence,
-            onClick = onCorrect,
+            onClick = onWrong,
             color = errorButtonColor,
         )
 
         RoundGameButton(
             icon = R.drawable.ic_correct,
-            onClick = onPass,
+            onClick = onCorrect,
             color = correctWordButtonColor,
         )
     }
