@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.nicolascristaldo.tabupalabras.R
+import com.nicolascristaldo.tabupalabras.ui.theme.textWhite
 
 @Composable
 fun CounterSection(
@@ -23,6 +24,7 @@ fun CounterSection(
     ) {
         Text(
             text = stringResource(title),
+            color = textWhite,
             modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
         )
 
