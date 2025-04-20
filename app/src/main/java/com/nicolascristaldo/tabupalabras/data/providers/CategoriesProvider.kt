@@ -1,6 +1,8 @@
 package com.nicolascristaldo.tabupalabras.data.providers
 
 import com.nicolascristaldo.tabupalabras.domain.model.TabuCategory
+import com.nicolascristaldo.tabupalabras.ui.theme.actionsCategoryColor1
+import com.nicolascristaldo.tabupalabras.ui.theme.actionsCategoryColor2
 import com.nicolascristaldo.tabupalabras.ui.theme.animalsCategoryColor1
 import com.nicolascristaldo.tabupalabras.ui.theme.animalsCategoryColor2
 import com.nicolascristaldo.tabupalabras.ui.theme.argentinaCategoryColor1
@@ -15,6 +17,8 @@ import com.nicolascristaldo.tabupalabras.ui.theme.entertainmentCategoryColor1
 import com.nicolascristaldo.tabupalabras.ui.theme.entertainmentCategoryColor2
 import com.nicolascristaldo.tabupalabras.ui.theme.musicCategoryColor1
 import com.nicolascristaldo.tabupalabras.ui.theme.musicCategoryColor2
+import com.nicolascristaldo.tabupalabras.ui.theme.professionsCategoryColor1
+import com.nicolascristaldo.tabupalabras.ui.theme.professionsCategoryColor2
 import com.nicolascristaldo.tabupalabras.ui.theme.sportsCategoryColor1
 import com.nicolascristaldo.tabupalabras.ui.theme.sportsCategoryColor2
 
@@ -49,6 +53,16 @@ class CategoriesProvider {
             name = "Deportes",
             colors = listOf(sportsCategoryColor1, sportsCategoryColor2),
             emoji = "\uD83C\uDFC0"
+        ),
+        TabuCategory(
+            name = "Profesiones",
+            colors = listOf(professionsCategoryColor1, professionsCategoryColor2),
+            emoji = "\uD83D\uDCBC"
+        ),
+        TabuCategory(
+            name = "Acciones",
+            colors = listOf(actionsCategoryColor1, actionsCategoryColor2),
+            emoji = "\uD83C\uDFC3\u200D➡\uFE0F"
         ),
         TabuCategory(
             name = "Historia",

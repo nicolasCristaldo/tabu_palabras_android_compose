@@ -43,6 +43,12 @@ val musicCategoryColor2 =  Color(0xFF5C68B4)
 val sportsCategoryColor1 = Color(0xFFEAD31D)
 val sportsCategoryColor2 = Color(0xFFEF6F49)
 
+val professionsCategoryColor1 = Color(0xFF2745F1)
+val professionsCategoryColor2 = Color(0xFF7EBE38)
+
+val actionsCategoryColor1 = Color(0xFFEC594E)
+val actionsCategoryColor2 = Color(0xFF26D5EC)
+
 val historyCategoryColor1 = Color(0xFFF3D9A2)
 val historyCategoryColor2 = Color(0xFF8A6705)
 
