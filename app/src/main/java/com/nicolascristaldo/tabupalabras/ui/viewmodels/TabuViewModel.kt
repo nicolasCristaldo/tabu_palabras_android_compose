@@ -16,7 +16,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TabuViewModel @Inject constructor() : ViewModel() {
+class TabuViewModel @Inject constructor(
+    private val cardsProvider: CardsProvider
+) : ViewModel() {
     private val _uiState = MutableStateFlow(TabuUiState())
     val uiState: StateFlow<TabuUiState> = _uiState.asStateFlow()
 
@@ -56,7 +58,7 @@ class TabuViewModel @Inject constructor() : ViewModel() {
     }
 
     fun startGame() {
-        val cards = CardsProvider().getCardsByCategory(
+        val cards = cardsProvider.getCardsByCategory(
             _uiState.value.categorySelected?.name ?: "General"
         )
         _uiState.update {
@@ -79,7 +81,7 @@ class TabuViewModel @Inject constructor() : ViewModel() {
         _uiState.update { currentState ->
             val availableCards = currentState.availableCards.drop(1)
             val newAvailableCards = availableCards.ifEmpty {
-                CardsProvider().getCardsByCategory(currentState.categorySelected?.name ?: "General")
+                cardsProvider.getCardsByCategory(currentState.categorySelected?.name ?: "General")
             }
             val nextCard = newAvailableCards.firstOrNull()
             val currentTeam = currentState.currentTeam
