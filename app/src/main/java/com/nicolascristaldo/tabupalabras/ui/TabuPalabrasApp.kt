@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.nicolascristaldo.tabupalabras.data.preferences.PreferencesManager
 import com.nicolascristaldo.tabupalabras.ui.navigation.TabuPalabrasNavHost
 import com.nicolascristaldo.tabupalabras.ui.theme.verticalGradientBackground
 import com.nicolascristaldo.tabupalabras.ui.theme.appBackGroundColor1
@@ -18,6 +19,7 @@ import com.nicolascristaldo.tabupalabras.ui.viewmodels.TabuViewModel
 fun TabuPalabrasApp(
     viewModel: TabuViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
+    preferencesManager: PreferencesManager,
     modifier: Modifier = Modifier
 ) {
     Scaffold { innerPadding ->
@@ -25,6 +27,7 @@ fun TabuPalabrasApp(
             TabuPalabrasNavHost(
                 viewModel = viewModel,
                 navController = navController,
+                preferencesManager = preferencesManager,
                 modifier = modifier
                     .padding(innerPadding)
                     .verticalGradientBackground(

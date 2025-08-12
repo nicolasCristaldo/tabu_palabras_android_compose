@@ -27,5 +27,9 @@
 
     <!-- Content Descriptions -->
     <string name="back_button_description">Back</string>
+    <string name="next_button_description">Next</string>
     <string name="edit_icon_description">Edit</string>
+
+    <!-- Buttons -->
+    <string name="understood_button">Entendido</string>
 </resources>

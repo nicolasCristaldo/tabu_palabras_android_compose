@@ -7,14 +7,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavController
 import com.nicolascristaldo.tabupalabras.R
 import com.nicolascristaldo.tabupalabras.data.destinations.AppDestinations
+import com.nicolascristaldo.tabupalabras.data.preferences.PreferencesManager
 import com.nicolascristaldo.tabupalabras.data.providers.CategoriesProvider
 import com.nicolascristaldo.tabupalabras.domain.model.TabuCategory
+import com.nicolascristaldo.tabupalabras.ui.components.TutorialDialog
 import com.nicolascristaldo.tabupalabras.ui.screens.home.components.CategoryCard
 import com.nicolascristaldo.tabupalabras.ui.screens.home.components.HomeHeader
 
@@ -22,9 +28,11 @@ import com.nicolascristaldo.tabupalabras.ui.screens.home.components.HomeHeader
 fun HomeScreen(
     onCategorySelected: (TabuCategory) -> Unit,
     navController: NavController,
+    preferencesManager: PreferencesManager,
     modifier: Modifier = Modifier
 ) {
     val categories = CategoriesProvider().getCategories()
+    var showTutorial by remember { mutableStateOf(!preferencesManager.isTutorialShown()) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,5 +62,14 @@ fun HomeScreen(
                 )
             }
         }
+    }
+
+    if (showTutorial) {
+        TutorialDialog(
+            onDismiss = {
+                preferencesManager.setTutorialShown()
+                showTutorial = false
+            }
+        )
     }
 }

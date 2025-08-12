@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.nicolascristaldo.tabupalabras.R
 import com.nicolascristaldo.tabupalabras.data.destinations.AppDestinations
+import com.nicolascristaldo.tabupalabras.data.preferences.PreferencesManager
 import com.nicolascristaldo.tabupalabras.ui.screens.config.ConfigScreen
 import com.nicolascristaldo.tabupalabras.ui.screens.game.GameScreen
 import com.nicolascristaldo.tabupalabras.ui.screens.home.HomeScreen
@@ -20,6 +21,7 @@ import com.nicolascristaldo.tabupalabras.ui.viewmodels.TabuViewModel
 fun TabuPalabrasNavHost(
     viewModel: TabuViewModel,
     navController: NavHostController,
+    preferencesManager: PreferencesManager,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -30,7 +32,8 @@ fun TabuPalabrasNavHost(
         composable(route = AppDestinations.Home.route) {
             HomeScreen(
                 onCategorySelected = viewModel::onCategorySelected,
-                navController = navController
+                navController = navController,
+                preferencesManager = preferencesManager
             )
         }
 
