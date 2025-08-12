@@ -23,7 +23,7 @@ Juego de Tabú en Android, creado con Jetpack Compose. Juego por equipos donde l
 ## 📦 Paquete APK
 
 Descarga el APK generado:  
-[tabu-palabras.apk](https://github.com/nicolasCristaldo/tabu_palabras_android_compose/blob/main/app/release/app-release.apk)
+[tabu-palabras.apk](https://github.com/nicolasCristaldo/tabu_palabras_android_compose/blob/main/app/release/tabu-palabras.apk)
 
 ## 🔧 Tecnologías usadas
 
